@@ -68,7 +68,7 @@ impl ArcRwLockControllerData {
     }
 
     #[inline]
-    pub async fn set_response<T: Into<ResponseData>>(&self, data: T) -> &Self {
+    pub(super) async fn set_response<T: Into<ResponseData>>(&self, data: T) -> &Self {
         let mut controller_data: RwLockWriteControllerData = self.get_write_lock().await;
         controller_data.set_response(server::response::r#type::Response::from(data));
         self
