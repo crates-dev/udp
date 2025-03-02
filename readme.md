@@ -1,17 +1,17 @@
 <center>
 
-## upd
+## udp
 
-[![](https://img.shields.io/crates/v/upd.svg)](https://crates.io/crates/upd)
-[![](https://docs.rs/upd/badge.svg)](https://docs.rs/upd)
-[![](https://github.com/ltpp-universe/upd/workflows/Rust/badge.svg)](https://github.com/ltpp-universe/upd/actions?query=workflow:Rust)
-[![](https://img.shields.io/crates/l/upd.svg)](./LICENSE)
+[![](https://img.shields.io/crates/v/udp.svg)](https://crates.io/crates/udp)
+[![](https://docs.rs/udp/badge.svg)](https://docs.rs/udp)
+[![](https://github.com/ltpp-universe/udp/workflows/Rust/badge.svg)](https://github.com/ltpp-universe/udp/actions?query=workflow:Rust)
+[![](https://img.shields.io/crates/l/udp.svg)](./LICENSE)
 
 </center>
 
-[Official Documentation](https://docs.ltpp.vip/upd/)
+[Official Documentation](https://docs.ltpp.vip/udp/)
 
-[Api Docs](https://docs.rs/upd/latest/upd/)
+[Api Docs](https://docs.rs/udp/latest/udp/)
 
 > A lightweight and efficient Rust library for building UDP servers with request-response handling.
 
@@ -20,13 +20,13 @@
 To use this crate, you can run cmd:
 
 ```shell
-cargo add upd
+cargo add udp
 ```
 
 ## Use
 
 ```rust
-use upd::*;
+use udp::*;
 
 async fn test_func(arc_lock_controller_data: ArcRwLockControllerData) {
     let res: ResponseData = arc_lock_controller_data.send("tcplane").await.unwrap();
