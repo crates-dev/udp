@@ -30,15 +30,13 @@ cargo add udp
 use udp::*;
 
 async fn test_func(arc_lock_controller_data: ArcRwLockControllerData) {
-    let res: ResponseData = arc_lock_controller_data.send("tcplane").await.unwrap();
-    arc_lock_controller_data
-        .get_controller_data()
-        .await
-        .get_log()
-        .debug(
-            format!("Response => {:?}\n", String::from_utf8_lossy(&res)),
-            log_debug_format_handler,
-        );
+let res: ResponseData = arc_lock_controller_data.send("tcplane").await.unwrap();
+arc_lock_controller_data
+    .log_debug(
+        format!("Response => {:?}\n", String::from_utf8_lossy(&res)),
+        log_debug_format_handler,
+    )
+    .await;
 }
 
 async fn run_server() {
