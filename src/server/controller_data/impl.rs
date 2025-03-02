@@ -75,6 +75,42 @@ impl ArcRwLockControllerData {
     }
 
     #[inline]
+    pub async fn log_info<T, L>(&self, data: T, func: L) -> &Self
+    where
+        T: LogDataTrait,
+        L: LogFuncTrait,
+    {
+        let controller_data: RwLockReadControllerData = self.get_read_lock().await;
+        let log: &Log = controller_data.get_log();
+        log.info(data, func);
+        self
+    }
+
+    #[inline]
+    pub async fn log_debug<T, L>(&self, data: T, func: L) -> &Self
+    where
+        T: LogDataTrait,
+        L: LogFuncTrait,
+    {
+        let controller_data: RwLockReadControllerData = self.get_read_lock().await;
+        let log: &Log = controller_data.get_log();
+        log.debug(data, func);
+        self
+    }
+
+    #[inline]
+    pub async fn log_error<T, L>(&self, data: T, func: L) -> &Self
+    where
+        T: LogDataTrait,
+        L: LogFuncTrait,
+    {
+        let controller_data: RwLockReadControllerData = self.get_read_lock().await;
+        let log: &Log = controller_data.get_log();
+        log.error(data, func);
+        self
+    }
+
+    #[inline]
     pub async fn send<T: Into<ResponseData>>(&self, data: T) -> ResponseResult {
         let response_result: ResponseResult = self
             .set_response(data)
