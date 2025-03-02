@@ -153,7 +153,7 @@ impl Server {
             let socket_lock: RwLockReadGuardUdpSocket = socket.get_read_lock().await;
             let (data_len, addr) = socket_lock.recv_from(&mut buf).await.unwrap();
             let tmp_arc_lock: ArcRwLock<Tmp> = Arc::clone(&self.tmp);
-            let func_list_arc_lock: FuncArcLock = Arc::clone(&self.get_func_list());
+            let func_list_arc_lock: ArcRwLockVecFuncBox = Arc::clone(self.get_func_list());
             let socket_clone: ArcRwLockUdpSocket = socket.clone();
             let handle_request = move || async move {
                 let request: Vec<u8> = buf[..data_len].to_vec();
