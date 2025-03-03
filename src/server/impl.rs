@@ -161,7 +161,7 @@ impl Server {
                 let mut controller_data: ControllerData = ControllerData::new();
                 controller_data
                     .set_socket(Some(socket_clone))
-                    .set_client_addr(Some(client_addr))
+                    .set_socket_addr(Some(client_addr))
                     .set_request(request)
                     .set_log(log);
                 let arc_lock_controller_data: ArcRwLockControllerData =
