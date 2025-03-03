@@ -23,7 +23,7 @@ pub use server_manager::*;
 pub use simd_json;
 pub use std_macro_extensions::*;
 pub use tokio;
-pub use utils::thread::*;
+pub use utils::{constant::*, thread::*};
 
 pub(crate) use common::r#type::*;
 pub(crate) use server::{
@@ -35,7 +35,7 @@ pub(crate) use std::{
     error::Error as StdError,
     fmt::{self, Display},
     future::Future,
-    net::{IpAddr, SocketAddr},
+    net::{IpAddr, Ipv4Addr, SocketAddr, SocketAddrV4},
     panic::set_hook,
     pin::Pin,
     sync::Arc,
