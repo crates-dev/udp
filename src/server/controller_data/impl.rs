@@ -70,7 +70,7 @@ impl ArcRwLockControllerData {
 
     #[inline]
     pub async fn get_socket_host(&self) -> OptionSocketHost {
-        let addr: Option<SocketAddr> = self.get_socket_addr().await;
+        let addr: OptionSocketAddr = self.get_socket_addr().await;
         let socket_host_opt: OptionSocketHost =
             addr.map(|socket_addr: SocketAddr| socket_addr.ip());
         socket_host_opt
@@ -78,7 +78,7 @@ impl ArcRwLockControllerData {
 
     #[inline]
     pub async fn get_socket_port(&self) -> OptionSocketPort {
-        let addr: Option<SocketAddr> = self.get_socket_addr().await;
+        let addr: OptionSocketAddr = self.get_socket_addr().await;
         let socket_port_opt: OptionSocketPort =
             addr.map(|socket_addr: SocketAddr| socket_addr.port());
         socket_port_opt
