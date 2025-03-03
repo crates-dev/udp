@@ -12,6 +12,8 @@ pub type OptionArcRwLockWriteGuardUdpSocket<'a> = Option<ArcRwLockWriteGuardUdpS
 pub type ArcMutexGuardUdpSocket<'a> = Arc<MutexGuard<'a, UdpSocket>>;
 pub type OptionArcMutexGuardUdpSocket<'a> = Option<ArcMutexGuardUdpSocket<'a>>;
 pub type OptionSocketAddr = Option<SocketAddr>;
+pub type ClientHost = IpAddr;
+pub type ClientPort =  u16;
 
 #[derive(Clone, Debug)]
 pub struct ArcRwLockUdpSocket(pub(super) ArcRwLock<UdpSocket>);

@@ -35,7 +35,7 @@ pub(crate) use std::{
     error::Error as StdError,
     fmt::{self, Display},
     future::Future,
-    net::SocketAddr,
+    net::{IpAddr, SocketAddr},
     panic::set_hook,
     pin::Pin,
     sync::Arc,

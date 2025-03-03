@@ -8,7 +8,7 @@ impl ControllerData {
             request: Request::new(),
             response: Response::default(),
             log: Log::default(),
-            addr: None,
+            client_addr: None,
         }
     }
 }
@@ -62,9 +62,22 @@ impl ArcRwLockControllerData {
     }
 
     #[inline]
-    pub async fn get_addr(&self) -> OptionSocketAddr {
+    pub async fn get_client_addr(&self) -> OptionSocketAddr {
         let controller_data: ControllerData = self.get_controller_data().await;
-        controller_data.get_addr().clone()
+        controller_data.get_client_addr().clone()
+    }
+
+    #[inline]
+    pub async fn get_client_host(&self) -> ClientHost {
+        let addr: Option<SocketAddr> = self.get_client_addr().await;
+        addr.map(|a| a.ip())
+            .unwrap_or(IpAddr::V4([0, 0, 0, 0].into()))
+    }
+
+    #[inline]
+    pub async fn get_client_port(&self) -> ClientPort {
+        let addr: Option<SocketAddr> = self.get_client_addr().await;
+        addr.map(|a| a.port()).unwrap_or(0)
     }
 
     #[inline]
@@ -117,7 +130,7 @@ impl ArcRwLockControllerData {
             .await
             .get_response()
             .await
-            .send(&self.get_socket().await, &self.get_addr().await)
+            .send(&self.get_socket().await, &self.get_client_addr().await)
             .await;
         return response_result;
     }

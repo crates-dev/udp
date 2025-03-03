@@ -9,7 +9,7 @@ pub struct ControllerData {
     pub(super) request: Request,
     pub(super) response: Response,
     pub(super) log: Log,
-    pub(super) addr: OptionSocketAddr,
+    pub(super) client_addr: OptionSocketAddr,
 }
 
 #[derive(Clone, Debug)]

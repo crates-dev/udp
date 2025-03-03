@@ -151,7 +151,7 @@ impl Server {
             let mut buf: Vec<u8> = vec![0u8; *cfg.get_buffer_size()];
             let socket: ArcRwLockUdpSocket = socket.clone();
             let socket_lock: RwLockReadGuardUdpSocket = socket.get_read_lock().await;
-            let (data_len, addr) = socket_lock.recv_from(&mut buf).await.unwrap();
+            let (data_len, client_addr) = socket_lock.recv_from(&mut buf).await.unwrap();
             let tmp_arc_lock: ArcRwLockTmp = Arc::clone(&self.tmp);
             let func_list_arc_lock: ArcRwLockVecFuncBox = Arc::clone(self.get_func_list());
             let socket_clone: ArcRwLockUdpSocket = socket.clone();
@@ -161,7 +161,7 @@ impl Server {
                 let mut controller_data: ControllerData = ControllerData::new();
                 controller_data
                     .set_socket(Some(socket_clone))
-                    .set_addr(Some(addr))
+                    .set_client_addr(Some(client_addr))
                     .set_request(request)
                     .set_log(log);
                 let arc_lock_controller_data: ArcRwLockControllerData =
