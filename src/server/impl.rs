@@ -122,8 +122,8 @@ impl Server {
         {
             let mut mut_func: RwLockWriteGuard<'_, Vec<Box<dyn Func + Send>>> =
                 self.func_list.write().await;
-            mut_func.push(Box::new(move |arc_lock_controller_data| {
-                Box::pin(func(arc_lock_controller_data))
+            mut_func.push(Box::new(move |controller_data| {
+                Box::pin(func(controller_data))
             }));
         }
         self
@@ -158,16 +158,16 @@ impl Server {
             let handle_request = move || async move {
                 let request: Vec<u8> = buf[..data_len].to_vec();
                 let log: Log = tmp_arc_lock.read().await.get_log().clone();
-                let mut controller_data: ControllerData = ControllerData::new();
+                let mut controller_data: InnerControllerData = InnerControllerData::new();
                 controller_data
                     .set_socket(Some(socket_clone))
                     .set_socket_addr(Some(client_addr))
                     .set_request(request)
                     .set_log(log);
-                let arc_lock_controller_data: ArcRwLockControllerData =
-                    ArcRwLockControllerData::from_controller_data(controller_data);
+                let controller_data: ControllerData =
+                    ControllerData::from_controller_data(controller_data);
                 for func in func_list_arc_lock.read().await.iter() {
-                    func(arc_lock_controller_data.clone()).await;
+                    func(controller_data.clone()).await;
                 }
             };
             tokio::spawn(async move {

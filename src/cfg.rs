@@ -2,9 +2,9 @@
 async fn test_server_basic_usage() {
     use crate::*;
 
-    async fn test_func(arc_lock_controller_data: ArcRwLockControllerData) {
-        let res: ResponseData = arc_lock_controller_data.send("udp").await.unwrap();
-        arc_lock_controller_data
+    async fn test_func(controller_data: ControllerData) {
+        let res: ResponseData = controller_data.send("udp").await.unwrap();
+        controller_data
             .log_debug(
                 format!("Response => {:?}\n", String::from_utf8_lossy(&res)),
                 log_debug_format_handler,
@@ -30,6 +30,7 @@ async fn test_server_basic_usage() {
             .await;
         server.listen().await;
     }
+
     recoverable_spawn::r#async::recoverable_spawn(run_server);
     std::thread::sleep(std::time::Duration::from_secs(10));
 }
