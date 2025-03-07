@@ -170,9 +170,7 @@ impl Server {
                     func(controller_data.clone()).await;
                 }
             };
-            tokio::spawn(async move {
-                handle_request().await;
-            });
+            tokio::spawn(handle_request());
         }
     }
 
