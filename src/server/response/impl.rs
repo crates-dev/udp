@@ -28,11 +28,11 @@ impl Response {
             let socket = socket_lock.get_read_lock().await;
             if let Some(addr) = addr_opt {
                 let response_data: &ResponseData = self.get_response_data();
-                return socket
+                socket
                     .send_to(response_data, &addr)
                     .await
-                    .and_then(|_| Ok(response_data.clone()))
-                    .map_err(|e| server::response::error::Error::ResponseError(e.to_string()));
+                    .map_err(|e| server::response::error::Error::ResponseError(e.to_string()))?;
+                return Ok(());
             }
         }
         Err(server::response::error::Error::Unknown)
