@@ -69,6 +69,33 @@ impl ControllerData {
     }
 
     #[inline]
+    pub async fn get_socket_addr_or_default(&self) -> SocketAddr {
+        let socket_result: OptionArcRwLockUdpSocket = self.get_socket().await;
+        if socket_result.is_none() {
+            return DEFAULT_SOCKET_ADDR;
+        }
+        let socket_addr: SocketAddr = socket_result
+            .unwrap()
+            .get_read_lock()
+            .await
+            .peer_addr()
+            .unwrap_or(DEFAULT_SOCKET_ADDR);
+        socket_addr
+    }
+
+    #[inline]
+    pub async fn get_socket_addr_string(&self) -> Option<String> {
+        let socket_addr_string_opt: Option<String> =
+            self.get_socket_addr().await.map(|data| data.to_string());
+        socket_addr_string_opt
+    }
+
+    #[inline]
+    pub async fn get_socket_addr_or_default_string(&self) -> String {
+        self.get_socket_addr_or_default().await.to_string()
+    }
+
+    #[inline]
     pub async fn get_socket_host(&self) -> OptionSocketHost {
         let addr: OptionSocketAddr = self.get_socket_addr().await;
         let socket_host_opt: OptionSocketHost =
