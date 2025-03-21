@@ -18,8 +18,8 @@ pub use recoverable_thread_pool::*;
 pub use serde;
 pub use serde_json;
 pub use server::{
-    config::r#type::*, controller_data::r#type::*, error::r#type::Error as ServerError, r#type::*,
-    request::r#type::*, response::r#type::*, socket::r#type::*,
+    config::r#type::*, controller_data::r#type::*, error::r#type::Error as ServerError,
+    request::r#type::*, response::r#type::*, socket::r#type::*, r#type::*,
 };
 pub use server_manager::*;
 pub use simd_json;
