@@ -9,7 +9,8 @@ impl Default for ServerConfig {
             log_size: DEFAULT_LOG_FILE_SIZE,
             buffer_size: DEFAULT_BUFFER_SIZE,
             interval_millis: DEFAULT_LOG_INTERVAL_MILLIS,
-            print: DEFAULT_PRINT,
+            inner_print: DEFAULT_INNER_PRINT,
+            inner_log: DEFAULT_INNER_LOG,
         }
     }
 }

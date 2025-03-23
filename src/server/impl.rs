@@ -19,18 +19,12 @@ impl Server {
     where
         T: Into<String>,
     {
-        {
-            let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
-            cfg.set_host(host.into());
-        }
+        self.get_cfg().write().await.set_host(host.into());
         self
     }
 
     pub async fn port(&mut self, port: usize) -> &mut Self {
-        {
-            let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
-            cfg.set_port(port);
-        }
+        self.get_cfg().write().await.set_port(port);
         self
     }
 
@@ -38,40 +32,65 @@ impl Server {
     where
         T: Into<String> + Clone,
     {
-        {
-            let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
-            cfg.set_log_dir(log_dir.clone().into());
-            let mut tmp: RwLockWriteGuard<'_, Tmp> = self.get_tmp().write().await;
-            tmp.log.set_path(log_dir.clone().into());
-        }
+        self.get_cfg()
+            .write()
+            .await
+            .set_log_dir(log_dir.clone().into());
+        self.get_tmp()
+            .write()
+            .await
+            .log
+            .set_path(log_dir.clone().into());
         self
     }
 
     pub async fn log_size(&mut self, log_size: usize) -> &mut Self {
-        {
-            let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
-            cfg.set_log_size(log_size);
-            let mut tmp: RwLockWriteGuard<'_, Tmp> = self.get_tmp().write().await;
-            tmp.log.set_file_size(log_size);
-        }
+        self.get_cfg().write().await.set_log_size(log_size);
+        self.get_tmp().write().await.log.set_file_size(log_size);
+        self
+    }
+
+    pub async fn enable_log(&self) -> &Self {
+        self.get_cfg()
+            .write()
+            .await
+            .set_log_size(DEFAULT_LOG_FILE_SIZE);
+        self.get_tmp()
+            .write()
+            .await
+            .get_mut_log()
+            .set_file_size(DEFAULT_LOG_FILE_SIZE);
+        self
+    }
+
+    pub async fn disable_log(&self) -> &Self {
+        self.get_cfg()
+            .write()
+            .await
+            .set_log_size(DISABLE_LOG_FILE_SIZE);
+        self.get_tmp()
+            .write()
+            .await
+            .get_mut_log()
+            .set_file_size(DISABLE_LOG_FILE_SIZE);
         self
     }
 
     pub async fn log_interval_millis(&mut self, interval_millis: usize) -> &mut Self {
-        {
-            let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
-            cfg.set_interval_millis(interval_millis);
-            let mut tmp: RwLockWriteGuard<'_, Tmp> = self.get_tmp().write().await;
-            tmp.log.set_interval_millis(interval_millis);
-        }
+        self.get_cfg()
+            .write()
+            .await
+            .set_interval_millis(interval_millis);
+        self.get_tmp()
+            .write()
+            .await
+            .log
+            .set_interval_millis(interval_millis);
         self
     }
 
     pub async fn print(&mut self, print: bool) -> &mut Self {
-        {
-            let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
-            cfg.set_print(print);
-        }
+        self.get_cfg().write().await.set_inner_print(print);
         self
     }
 
@@ -86,18 +105,42 @@ impl Server {
     }
 
     pub async fn open_print(&mut self, print: bool) -> &mut Self {
-        {
-            let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
-            cfg.set_print(print);
-        }
+        self.get_cfg().write().await.set_inner_print(print);
         self
     }
 
     pub async fn buffer(&mut self, buffer_size: usize) -> &mut Self {
-        {
-            let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
-            cfg.set_buffer_size(buffer_size);
-        }
+        self.get_cfg().write().await.set_buffer_size(buffer_size);
+        self
+    }
+
+    pub async fn inner_print(&self, print: bool) -> &Self {
+        self.get_cfg().write().await.set_inner_print(print);
+        self
+    }
+
+    pub async fn inner_log(&self, print: bool) -> &Self {
+        self.get_cfg().write().await.set_inner_log(print);
+        self
+    }
+
+    pub async fn enable_inner_print(&self) -> &Self {
+        self.inner_print(true).await;
+        self
+    }
+
+    pub async fn disable_inner_print(&self) -> &Self {
+        self.inner_print(false).await;
+        self
+    }
+
+    pub async fn enable_inner_log(&self) -> &Self {
+        self.inner_log(true).await;
+        self
+    }
+
+    pub async fn disable_inner_log(&self) -> &Self {
+        self.inner_log(false).await;
         self
     }
 
@@ -106,13 +149,12 @@ impl Server {
         F: AsyncFuncWithoutPin<Fut>,
         Fut: Future<Output = ()> + Send + 'static,
     {
-        {
-            let mut mut_func: RwLockWriteGuard<'_, Vec<Box<dyn Func + Send>>> =
-                self.func_list.write().await;
-            mut_func.push(Box::new(move |controller_data| {
+        self.func_list
+            .write()
+            .await
+            .push(Box::new(move |controller_data| {
                 Box::pin(func(controller_data))
             }));
-        }
         self
     }
 
@@ -126,10 +168,11 @@ impl Server {
             .await
             .map_err(|e| ServerError::TcpBindError(e.to_string()));
         if let Err(err) = socket_res {
-            {
-                let tmp: RwLockReadGuard<'_, Tmp> = self.get_tmp().read().await;
-                tmp.get_log().error(err.to_string(), common_log);
-            }
+            self.get_tmp()
+                .read()
+                .await
+                .get_log()
+                .error(err.to_string(), common_log);
             return;
         }
         let socket: ArcRwLockUdpSocket = ArcRwLockUdpSocket::from_socket(socket_res.unwrap());
@@ -161,14 +204,18 @@ impl Server {
     }
 
     async fn init_panic_hook(&self) {
-        let tmp: Tmp = self.tmp.read().await.clone();
-        let print: bool = self.get_cfg().read().await.get_print().clone();
+        let tmp: Tmp = self.get_tmp().read().await.clone();
+        let cfg: ServerConfig = self.get_cfg().read().await.clone();
+        let enable_inner_print: bool = *cfg.get_inner_print();
+        let enable_inner_log: bool = *cfg.get_inner_log() && tmp.get_log().is_enable();
         set_hook(Box::new(move |err| {
             let err_msg: String = format!("{}", err);
-            if print {
+            if enable_inner_print {
                 println_error!(err_msg);
             }
-            handle_error(&tmp, err_msg.clone());
+            if enable_inner_log {
+                handle_error(&tmp, err_msg.clone());
+            }
         }));
     }
 

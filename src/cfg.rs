@@ -17,7 +17,7 @@ async fn test_server_basic_usage() {
             .await;
     }
 
-    async fn run_server() {
+    async fn main() {
         let mut server: Server = Server::new();
         server.host("0.0.0.0").await;
         server.port(60000).await;
@@ -30,12 +30,12 @@ async fn test_server_basic_usage() {
         server
             .func(async_func!(test_string, |data| {
                 println_success!(&test_string);
-                println_success!(&format!("{:?}", data));
+                println_success!(String::from_utf8_lossy(&data.get_request().await));
             }))
             .await;
         server.listen().await;
     }
 
-    recoverable_spawn::r#async::recoverable_spawn(run_server);
+    recoverable_spawn::r#async::recoverable_spawn(main);
     std::thread::sleep(std::time::Duration::from_secs(10));
 }
