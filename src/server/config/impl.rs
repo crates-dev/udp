@@ -1,7 +1,6 @@
 use crate::*;
 
 impl Default for ServerConfig {
-    #[inline]
     fn default() -> Self {
         Self {
             host: DEFAULT_HOST.to_owned(),

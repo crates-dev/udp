@@ -1,7 +1,6 @@
 use crate::*;
 
 impl Default for Server {
-    #[inline]
     fn default() -> Self {
         Self {
             cfg: Arc::new(RwLock::new(ServerConfig::default())),
@@ -12,12 +11,10 @@ impl Default for Server {
 }
 
 impl Server {
-    #[inline]
     pub fn new() -> Self {
         Self::default()
     }
 
-    #[inline]
     pub async fn host<T>(&mut self, host: T) -> &mut Self
     where
         T: Into<String>,
@@ -29,7 +26,6 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn port(&mut self, port: usize) -> &mut Self {
         {
             let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
@@ -38,7 +34,6 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn log_dir<T>(&mut self, log_dir: T) -> &mut Self
     where
         T: Into<String> + Clone,
@@ -52,7 +47,6 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn log_size(&mut self, log_size: usize) -> &mut Self {
         {
             let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
@@ -63,7 +57,6 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn log_interval_millis(&mut self, interval_millis: usize) -> &mut Self {
         {
             let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
@@ -74,7 +67,6 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn print(&mut self, print: bool) -> &mut Self {
         {
             let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
@@ -83,19 +75,16 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn enable_print(&mut self) -> &mut Self {
         self.print(true).await;
         self
     }
 
-    #[inline]
     pub async fn disable_print(&mut self) -> &mut Self {
         self.print(false).await;
         self
     }
 
-    #[inline]
     pub async fn open_print(&mut self, print: bool) -> &mut Self {
         {
             let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
@@ -104,7 +93,6 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn buffer(&mut self, buffer_size: usize) -> &mut Self {
         {
             let mut cfg: RwLockWriteGuard<'_, ServerConfig> = self.get_cfg().write().await;
@@ -113,7 +101,6 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn func<F, Fut>(&mut self, func: F) -> &mut Self
     where
         F: AsyncFuncWithoutPin<Fut>,
@@ -129,7 +116,6 @@ impl Server {
         self
     }
 
-    #[inline]
     pub async fn listen(&mut self) {
         self.init().await;
         let cfg: ServerConfig = self.get_cfg().read().await.clone();
@@ -174,7 +160,6 @@ impl Server {
         }
     }
 
-    #[inline]
     async fn init_panic_hook(&self) {
         let tmp: Tmp = self.tmp.read().await.clone();
         let print: bool = self.get_cfg().read().await.get_print().clone();
@@ -187,13 +172,11 @@ impl Server {
         }));
     }
 
-    #[inline]
     async fn init_log(&self) {
         let tmp: RwLockReadGuard<'_, Tmp> = self.get_tmp().read().await;
         log_run(tmp.get_log());
     }
 
-    #[inline]
     async fn init(&self) {
         self.init_panic_hook().await;
         self.init_log().await;

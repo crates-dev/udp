@@ -1,24 +1,20 @@
 use crate::*;
 
 impl Default for Response {
-    #[inline]
     fn default() -> Self {
         Self(Vec::new())
     }
 }
 
 impl Response {
-    #[inline]
     pub fn from<T: Into<ResponseData>>(data: T) -> Self {
         Self(data.into())
     }
 
-    #[inline]
     pub fn get_response_data(&self) -> &ResponseData {
         &self.0
     }
 
-    #[inline]
     pub async fn send(
         &self,
         socket_opt: &OptionArcRwLockUdpSocket,
