@@ -52,7 +52,6 @@ async fn main() {
     server.log_dir("./logs").await;
     server.log_size(100_024_000).await;
     server.buffer(100_024_000).await;
-    server.log_interval_millis(360).await;
     server.func(test_func).await;
     let test_string: String = "test".to_owned();
     server
