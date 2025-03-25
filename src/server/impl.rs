@@ -155,26 +155,19 @@ impl Server {
         let host: String = cfg.get_host().to_owned();
         let port: usize = *cfg.get_port();
         let addr: String = format!("{}{}{}", host, COLON_SPACE_SYMBOL, port);
-        let socket_res: Result<UdpSocket, ServerError> = UdpSocket::bind(&addr)
+        let socket: UdpSocket = UdpSocket::bind(&addr)
             .await
-            .map_err(|e| ServerError::TcpBindError(e.to_string()));
-        if let Err(err) = socket_res {
-            self.get_tmp()
-                .read()
-                .await
-                .get_log()
-                .error(&err.to_string(), common_log);
-            return;
-        }
-        let socket: ArcRwLockUdpSocket = ArcRwLockUdpSocket::from_socket(socket_res.unwrap());
+            .map_err(|e| ServerError::TcpBindError(e.to_string()))
+            .unwrap();
+        let socket_arc_lock: ArcRwLockUdpSocket = ArcRwLockUdpSocket::from_socket(socket);
         loop {
             let mut buf: Vec<u8> = vec![0u8; *cfg.get_buffer_size()];
-            let socket: ArcRwLockUdpSocket = socket.clone();
-            let socket_lock: RwLockReadGuardUdpSocket = socket.get_read_lock().await;
+            let socket_arc_lock: ArcRwLockUdpSocket = socket_arc_lock.clone();
+            let socket_lock: RwLockReadGuardUdpSocket = socket_arc_lock.get_read_lock().await;
             let (data_len, client_addr) = socket_lock.recv_from(&mut buf).await.unwrap();
             let tmp_arc_lock: ArcRwLockTmp = Arc::clone(&self.tmp);
             let func_list_arc_lock: ArcRwLockVecFuncBox = Arc::clone(self.get_func_list());
-            let socket_clone: ArcRwLockUdpSocket = socket.clone();
+            let socket_clone: ArcRwLockUdpSocket = socket_arc_lock.clone();
             let handle_request = move || async move {
                 let request: Vec<u8> = buf[..data_len].to_vec();
                 let log: Log = tmp_arc_lock.read().await.get_log().clone();
