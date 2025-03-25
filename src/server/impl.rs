@@ -163,7 +163,7 @@ impl Server {
                 .read()
                 .await
                 .get_log()
-                .error(err.to_string(), common_log);
+                .error(&err.to_string(), common_log);
             return;
         }
         let socket: ArcRwLockUdpSocket = ArcRwLockUdpSocket::from_socket(socket_res.unwrap());
@@ -200,13 +200,12 @@ impl Server {
         let enable_inner_print: bool = *cfg.get_inner_print();
         let enable_inner_log: bool = *cfg.get_inner_log() && tmp.get_log().is_enable();
         set_hook(Box::new(move |err| {
-            for line in err.to_string().lines() {
-                if enable_inner_print {
-                    println_error!(line);
-                }
-                if enable_inner_log {
-                    handle_error(&tmp, line.to_string());
-                }
+            let err_string: String = err.to_string();
+            if enable_inner_print {
+                println_error!(err_string);
+            }
+            if enable_inner_log {
+                handle_error(&tmp, &err_string);
             }
         }));
     }

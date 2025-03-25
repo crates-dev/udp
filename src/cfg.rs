@@ -8,11 +8,11 @@ async fn test_server_basic_usage() {
         let response_data: &ResponseData = response.get_response_data();
         controller_data
             .log_debug(
-                format!(
+                &format!(
                     "Response => {:?}\n",
                     String::from_utf8_lossy(&response_data)
                 ),
-                log_debug_format_handler,
+                log_handler,
             )
             .await;
     }
