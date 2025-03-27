@@ -143,9 +143,7 @@ impl Server {
         self.func_list
             .write()
             .await
-            .push(Box::new(move |controller_data| {
-                Box::pin(func(controller_data))
-            }));
+            .push(Box::new(move |ctx| Box::pin(func(ctx))));
         self
     }
 
@@ -171,16 +169,14 @@ impl Server {
             let handle_request = move || async move {
                 let request: Vec<u8> = buf[..data_len].to_vec();
                 let log: Log = tmp_arc_lock.read().await.get_log().clone();
-                let mut controller_data: InnerControllerData = InnerControllerData::new();
-                controller_data
-                    .set_socket(Some(socket_clone))
+                let mut ctx: InnerContext = InnerContext::new();
+                ctx.set_socket(Some(socket_clone))
                     .set_socket_addr(Some(client_addr))
                     .set_request(request)
                     .set_log(log);
-                let controller_data: ControllerData =
-                    ControllerData::from_controller_data(controller_data);
+                let ctx: Context = Context::from_inner_context(ctx);
                 for func in func_list_arc_lock.read().await.iter() {
-                    func(controller_data.clone()).await;
+                    func(ctx.clone()).await;
                 }
             };
             tokio::spawn(handle_request());

@@ -27,10 +27,10 @@ impl Response {
                 socket
                     .send_to(response_data, &addr)
                     .await
-                    .map_err(|e| server::response::error::Error::ResponseError(e.to_string()))?;
+                    .map_err(|e| response::error::Error::ResponseError(e.to_string()))?;
                 return Ok(());
             }
         }
-        Err(server::response::error::Error::Unknown)
+        Err(response::error::Error::Unknown)
     }
 }

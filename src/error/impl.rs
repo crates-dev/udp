@@ -1,9 +1,9 @@
-use super::r#type::Error;
+use super::r#type::ServerError;
 use crate::*;
 
-impl StdError for Error {}
+impl StdError for ServerError {}
 
-impl Display for Error {
+impl Display for ServerError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::TcpBindError(data) => write!(f, "Tcp bind error{}{}", COLON_SPACE, data),

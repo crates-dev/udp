@@ -1,8 +1,8 @@
 use crate::*;
 
-impl InnerControllerData {
+impl InnerContext {
     pub fn new() -> Self {
-        InnerControllerData {
+        InnerContext {
             socket: None,
             request: Request::new(),
             response: Response::default(),
@@ -12,20 +12,20 @@ impl InnerControllerData {
     }
 }
 
-impl ControllerData {
-    pub(crate) fn from_controller_data(controller_data: InnerControllerData) -> Self {
-        Self(Arc::new(RwLock::new(controller_data)))
+impl Context {
+    pub(crate) fn from_inner_context(ctx: InnerContext) -> Self {
+        Self(Arc::new(RwLock::new(ctx)))
     }
 
-    pub async fn get_read_lock(&self) -> RwLockReadControllerData {
+    pub async fn get_read_lock(&self) -> RwLockReadContext {
         self.0.read().await
     }
 
-    pub async fn get_write_lock(&self) -> RwLockWriteControllerData {
+    pub async fn get_write_lock(&self) -> RwLockWriteContext {
         self.0.write().await
     }
 
-    pub async fn get(&self) -> InnerControllerData {
+    pub async fn get(&self) -> InnerContext {
         self.get_read_lock().await.clone()
     }
 
