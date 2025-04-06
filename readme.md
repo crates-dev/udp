@@ -30,7 +30,7 @@ cargo add udp
 use udp::*;
 
 async fn test_func(ctx: Context) {
-    ctx.send("Udp").await.unwrap();
+    ctx.send("udp").await.unwrap();
     let response: Response = ctx.get_response().await;
     let response_data: &ResponseData = response.get_response_data();
     ctx.log_debug(
