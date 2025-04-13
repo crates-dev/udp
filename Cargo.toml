@@ -1,6 +1,6 @@
 [package]
 name = "udp"
-version = "0.20.0"
+version = "0.21.0"
 edition = "2024"
 authors = ["ltpp-universe <root@ltpp.vip>"]
 license = "MIT"
@@ -21,20 +21,19 @@ exclude = [
 async-func = "0.2.6"
 clonelicious = "1.1.1"
 color-output = "6.6.0"
-file-operation = "0.5.5"
-hyperlane-log = "1.15.0"
-lombok-macros = "1.9.6"
+file-operation = "0.5.6"
+hyperlane-log = "1.16.0"
+lombok-macros = "1.10.0"
 recoverable-spawn = "3.7.1"
 recoverable-thread-pool = "2.2.1"
-std-macro-extensions = "0.22.1"
+std-macro-extensions = "0.23.0"
 tokio = { version = "1.44.2", features = ["full"] }
 once_cell = "1.21.3"
 simd-json = "0.15.0"
 serde = "1.0.219"
 serde_json = "1.0.140"
 futures = "0.3.31"
-server-manager = "3.1.2"
-hyperlane-time = "0.4.0"
+server-manager = "3.2.0"
 
 [profile.dev]
 incremental = false
