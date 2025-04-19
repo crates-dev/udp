@@ -1,4 +1,4 @@
-use super::r#type::ServerError;
+use super::r#enum::ServerError;
 use crate::*;
 
 impl StdError for ServerError {}

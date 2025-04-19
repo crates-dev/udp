@@ -1,5 +1,3 @@
-use tokio::net::UdpSocket;
-
 use crate::*;
 
 pub type ArcUdpSocket = Arc<UdpSocket>;
@@ -14,6 +12,3 @@ pub type OptionArcMutexGuardUdpSocket<'a> = Option<ArcMutexGuardUdpSocket<'a>>;
 pub type OptionSocketHost = Option<IpAddr>;
 pub type OptionSocketPort = Option<u16>;
 pub type OptionSocketAddr = Option<SocketAddr>;
-
-#[derive(Clone, Debug)]
-pub struct ArcRwLockUdpSocket(pub(super) ArcRwLock<UdpSocket>);

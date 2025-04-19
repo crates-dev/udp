@@ -1,7 +1,4 @@
-use super::error::Error;
+use crate::*;
 
 pub type ResponseData = Vec<u8>;
-pub type ResponseResult = Result<(), Error>;
-
-#[derive(Clone, Debug)]
-pub struct Response(pub(super) ResponseData);
+pub type ResponseResult = Result<(), ResponseError>;
