@@ -10,11 +10,11 @@ pub(crate) mod socket;
 pub(crate) mod tmp;
 pub(crate) mod utils;
 
-pub use async_func::*;
 pub use clonelicious::*;
 pub use color_output::*;
 pub use config::*;
 pub use context::*;
+pub use future_fn::*;
 pub use request::*;
 pub use response::*;
 pub use server::*;
