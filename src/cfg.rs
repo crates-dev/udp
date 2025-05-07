@@ -31,7 +31,7 @@ async fn test_server_basic_usage() {
                 println_success!(String::from_utf8_lossy(&data.get_request().await));
             }))
             .await;
-        server.listen().await;
+        server.run().await;
     }
 
     let _ = tokio::time::timeout(std::time::Duration::from_secs(60), main()).await;

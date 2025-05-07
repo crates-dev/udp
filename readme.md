@@ -59,7 +59,7 @@ async fn main() {
             println_success!(String::from_utf8_lossy(&data.get_request().await));
         }))
         .await;
-    server.listen().await;
+    server.run().await;
 }
 ```
 
