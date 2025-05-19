@@ -1,6 +1,6 @@
 use crate::*;
 
-#[derive(Clone, Lombok)]
+#[derive(Clone, Data)]
 pub struct Tmp {
     pub(crate) log: Log,
 }
