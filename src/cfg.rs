@@ -26,7 +26,7 @@ async fn test_server_basic_usage() {
         server.func(test_func).await;
         let test_string: String = "test".to_owned();
         server
-            .func(future_fn!(test_string, |data| {
+            .func(future_fn!(test_string, |data: Context| {
                 println_success!(&test_string);
                 println_success!(String::from_utf8_lossy(&data.get_request().await));
             }))

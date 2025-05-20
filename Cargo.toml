@@ -1,12 +1,12 @@
 [package]
 name = "udp"
-version = "0.26.0"
+version = "0.26.1"
 edition = "2024"
-authors = ["ltpp-universe <root@ltpp.vip>"]
+authors = ["eastspire <root@ltpp.vip>"]
 license = "MIT"
 description = "A lightweight and efficient Rust library for building UDP servers with request-response handling."
 keywords = ["udp", "request", "response", "server", "network"]
-repository = "https://github.com/ltpp-universe/udp.git"
+repository = "https://github.com/eastspire/udp.git"
 categories = ["network-programming", "web-programming"]
 exclude = [
     "target",
@@ -18,22 +18,22 @@ exclude = [
 ]
 
 [dependencies]
-future-fn = "0.2.2"
-clonelicious = "2.0.1"
-color-output = "6.6.1"
-file-operation = "0.5.9"
-hyperlane-log = "1.16.2"
-lombok-macros = "1.11.0"
-recoverable-spawn = "3.7.2"
-recoverable-thread-pool = "2.3.2"
-std-macro-extensions = "0.23.0"
+future-fn = "0.2.3"
+clonelicious = "2.0.2"
+color-output = "6.6.2"
+file-operation = "0.5.10"
+hyperlane-log = "1.16.4"
+lombok-macros = "1.11.1"
+recoverable-spawn = "3.7.3"
+recoverable-thread-pool = "2.3.3"
+std-macro-extensions = "0.23.1"
 tokio = { version = "1.45.0", features = ["full"] }
 once_cell = "1.21.3"
 simd-json = "0.15.1"
 serde = "1.0.219"
 serde_json = "1.0.140"
 futures = "0.3.31"
-server-manager = "3.2.1"
+server-manager = "3.2.2"
 
 [profile.dev]
 incremental = false
