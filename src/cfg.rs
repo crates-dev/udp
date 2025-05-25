@@ -7,7 +7,7 @@ async fn test_server_basic_usage() {
     }
 
     fn error_handle(error: String) {
-        eprint!("{}", error);
+        eprintln!("{}", error);
         let _ = std::io::Write::flush(&mut std::io::stderr());
     }
 
