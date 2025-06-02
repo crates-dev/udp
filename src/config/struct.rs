@@ -1,9 +1,9 @@
 use crate::*;
 
-#[derive(Clone, Data)]
+#[derive(Clone)]
 pub struct ServerConfig {
-    pub(super) host: String,
-    pub(super) port: usize,
-    pub(super) buffer_size: usize,
-    pub(super) error_handle: ArcErrorHandle,
+    pub(crate) host: String,
+    pub(crate) port: usize,
+    pub(crate) buffer_size: usize,
+    pub(crate) error_handle: ArcErrorHandle,
 }

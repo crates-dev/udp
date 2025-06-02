@@ -18,17 +18,17 @@ impl Server {
     where
         T: Into<String>,
     {
-        self.get_config().write().await.set_host(host.into());
+        self.config.write().await.host = host.into();
         self
     }
 
     pub async fn port(&mut self, port: usize) -> &mut Self {
-        self.get_config().write().await.set_port(port);
+        self.config.write().await.port = port;
         self
     }
 
     pub async fn buffer(&mut self, buffer_size: usize) -> &mut Self {
-        self.get_config().write().await.set_buffer_size(buffer_size);
+        self.config.write().await.buffer_size = buffer_size;
         self
     }
 
@@ -36,10 +36,7 @@ impl Server {
     where
         F: ErrorHandle + Send + Sync + 'static,
     {
-        self.get_config()
-            .write()
-            .await
-            .set_error_handle(Arc::new(func));
+        self.config.write().await.error_handle = Arc::new(func);
         self
     }
 
@@ -57,9 +54,9 @@ impl Server {
 
     pub async fn run(&mut self) {
         self.init().await;
-        let config: ServerConfig = self.get_config().read().await.clone();
-        let host: String = config.get_host().to_owned();
-        let port: usize = *config.get_port();
+        let config: ServerConfig = self.config.read().await.clone();
+        let host: String = config.host.clone();
+        let port: usize = config.port;
         let addr: String = format!("{}{}{}", host, COLON_SPACE_SYMBOL, port);
         let socket: UdpSocket = UdpSocket::bind(&addr)
             .await
@@ -67,18 +64,18 @@ impl Server {
             .unwrap();
         let socket_arc_lock: ArcRwLockUdpSocket = ArcRwLockUdpSocket::from_socket(socket);
         loop {
-            let mut buf: Vec<u8> = vec![0u8; *config.get_buffer_size()];
+            let mut buf: Vec<u8> = vec![0u8; config.buffer_size];
             let socket_arc_lock: ArcRwLockUdpSocket = socket_arc_lock.clone();
             let socket_lock: RwLockReadGuardUdpSocket = socket_arc_lock.get_read_lock().await;
             let (data_len, client_addr) = socket_lock.recv_from(&mut buf).await.unwrap();
-            let func_list_arc_lock: ArcRwLockVecFuncBox = Arc::clone(self.get_func_list());
+            let func_list_arc_lock: ArcRwLockVecFuncBox = Arc::clone(&self.func_list);
             let socket_clone: ArcRwLockUdpSocket = socket_arc_lock.clone();
             let handle_request = move || async move {
                 let request: Vec<u8> = buf[..data_len].to_vec();
                 let mut ctx: InnerContext = InnerContext::new();
-                ctx.set_socket(Some(socket_clone))
-                    .set_socket_addr(Some(client_addr))
-                    .set_request(request);
+                ctx.socket = Some(socket_clone);
+                ctx.socket_addr = Some(client_addr);
+                ctx.request = request;
                 let ctx: Context = Context::from_inner_context(ctx);
                 for func in func_list_arc_lock.read().await.iter() {
                     func(ctx.clone()).await;
@@ -89,8 +86,7 @@ impl Server {
     }
 
     async fn init_panic_hook(&self) {
-        let error_handle: ArcErrorHandle =
-            self.get_config().read().await.get_error_handle().clone();
+        let error_handle: ArcErrorHandle = self.config.read().await.error_handle.clone();
         set_hook(Box::new(move |err| {
             let data: String = err.to_string();
             error_handle(data);

@@ -1,12 +1,12 @@
 use crate::*;
 
-#[derive(Clone, Data)]
+#[derive(Clone)]
 pub struct InnerContext {
-    pub(super) socket: OptionArcRwLockUdpSocket,
-    pub(super) request: Request,
-    pub(super) response: Response,
-    pub(super) socket_addr: OptionSocketAddr,
-    pub(super) data: HashMapArcAnySendSync,
+    pub(crate) socket: OptionArcRwLockUdpSocket,
+    pub(crate) request: Request,
+    pub(crate) response: Response,
+    pub(crate) socket_addr: OptionSocketAddr,
+    pub(crate) data: HashMapArcAnySendSync,
 }
 
 #[derive(Clone)]
