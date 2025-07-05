@@ -1,6 +1,6 @@
 [package]
 name = "udp"
-version = "1.0.4"
+version = "1.0.5"
 edition = "2024"
 authors = ["root@ltpp.vip"]
 license = "MIT"
@@ -18,7 +18,7 @@ exclude = [
 ]
 
 [dependencies]
-tokio = { version = "1.45.1", features = ["full"] }
+tokio = { version = "1.46.1", features = ["full"] }
 
 [profile.dev]
 incremental = false
