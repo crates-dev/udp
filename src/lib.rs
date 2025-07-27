@@ -1,3 +1,8 @@
+//! udp
+//!
+//! A lightweight and efficient Rust library for
+//! building UDP servers with request-response handling.
+
 pub(crate) mod cfg;
 pub(crate) mod common;
 pub(crate) mod config;

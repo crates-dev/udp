@@ -1,6 +1,12 @@
 use crate::*;
 
+/// Default implementation for Server.
 impl Default for Server {
+    /// Creates a default server instance with empty configuration.
+    ///
+    /// # Returns
+    ///
+    /// - `Server` - New server instance with default values.
     fn default() -> Self {
         Self {
             config: Arc::new(RwLock::new(ServerConfig::default())),
@@ -9,11 +15,28 @@ impl Default for Server {
     }
 }
 
+/// Implementation of Server methods.
+///
+/// Provides server configuration and runtime operations.
 impl Server {
+    /// Creates a new server instance.
+    ///
+    /// # Returns
+    ///
+    /// - `Server` - New server instance.
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Sets the server host address.
+    ///
+    /// # Arguments
+    ///
+    /// - `T` - Host address convertible to String.
+    ///
+    /// # Returns
+    ///
+    /// - `&mut Self` - Mutable reference to self for chaining.
     pub async fn host<T>(&mut self, host: T) -> &mut Self
     where
         T: Into<String>,
@@ -22,16 +45,43 @@ impl Server {
         self
     }
 
+    /// Sets the server port number.
+    ///
+    /// # Arguments
+    ///
+    /// - `usize` - Port number.
+    ///
+    /// # Returns
+    ///
+    /// - `&mut Self` - Mutable reference to self for chaining.
     pub async fn port(&mut self, port: usize) -> &mut Self {
         self.config.write().await.port = port;
         self
     }
 
+    /// Sets the buffer size for incoming packets.
+    ///
+    /// # Arguments
+    ///
+    /// - `usize` - Buffer size in bytes.
+    ///
+    /// # Returns
+    ///
+    /// - `&mut Self` - Mutable reference to self for chaining.
     pub async fn buffer(&mut self, buffer_size: usize) -> &mut Self {
         self.config.write().await.buffer_size = buffer_size;
         self
     }
 
+    /// Sets the error handler function.
+    ///
+    /// # Arguments
+    ///
+    /// - `F` - Error handler function.
+    ///
+    /// # Returns
+    ///
+    /// - `&Self` - Reference to self for chaining.
     pub async fn error_handle<F>(&self, func: F) -> &Self
     where
         F: ErrorHandle + Send + Sync + 'static,
@@ -40,6 +90,15 @@ impl Server {
         self
     }
 
+    /// Registers a handler function.
+    ///
+    /// # Arguments
+    ///
+    /// - `F` - Async handler function.
+    ///
+    /// # Returns
+    ///
+    /// - `&mut Self` - Mutable reference to self for chaining.
     pub async fn func<F, Fut>(&mut self, func: F) -> &mut Self
     where
         F: AsyncFuncWithoutPin<Fut>,
@@ -52,6 +111,7 @@ impl Server {
         self
     }
 
+    /// Starts the server and begins processing requests.
     pub async fn run(&mut self) {
         self.init().await;
         let config: ServerConfig = self.config.read().await.clone();
@@ -85,6 +145,7 @@ impl Server {
         }
     }
 
+    /// Initializes the panic hook with error handler.
     async fn init_panic_hook(&self) {
         let error_handle: ArcErrorHandle = self.config.read().await.error_handle.clone();
         set_hook(Box::new(move |err| {
@@ -93,6 +154,7 @@ impl Server {
         }));
     }
 
+    /// Initializes server components.
     async fn init(&self) {
         self.init_panic_hook().await;
     }
