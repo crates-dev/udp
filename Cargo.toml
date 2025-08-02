@@ -1,12 +1,13 @@
 [package]
 name = "udp"
-version = "1.1.0"
+version = "1.1.1"
+readme = "README.md"
 edition = "2024"
 authors = ["root@ltpp.vip"]
 license = "MIT"
 description = "A lightweight and efficient Rust library for building UDP servers with request-response handling."
 keywords = ["udp", "request", "response", "server", "network"]
-repository = "https://github.com/eastspire/udp.git"
+repository = "https://github.com/crates-dev/udp.git"
 categories = ["network-programming", "web-programming"]
 exclude = [
     "target",
@@ -18,7 +19,7 @@ exclude = [
 ]
 
 [dependencies]
-tokio = { version = "1.47.0", features = ["full"] }
+tokio = { version = "1.47.1", features = ["full"] }
 
 [profile.dev]
 incremental = false
