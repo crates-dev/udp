@@ -24,7 +24,7 @@ impl Server {
     /// # Returns
     ///
     /// - `Server` - New server instance.
-    pub fn new() -> Self {
+    pub async fn new() -> Self {
         Self::default()
     }
 

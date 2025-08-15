@@ -12,7 +12,7 @@ async fn test_server_basic_usage() {
     }
 
     async fn main() {
-        let mut server: Server = Server::new();
+        let mut server: Server = Server::new().await;
         server.host("0.0.0.0").await;
         server.port(60000).await;
         server.buffer(100_024_000).await;
