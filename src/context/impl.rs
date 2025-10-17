@@ -40,7 +40,7 @@ impl Context {
     /// # Returns
     ///
     /// - `RwLockReadContext` - Read guard for the inner context.
-    pub async fn get_read_lock(&self) -> RwLockReadContext {
+    pub async fn get_read_lock(&'_ self) -> RwLockReadContext<'_> {
         self.0.read().await
     }
 
@@ -49,7 +49,7 @@ impl Context {
     /// # Returns
     ///
     /// - `RwLockWriteContext` - Write guard for the inner context.
-    pub async fn get_write_lock(&self) -> RwLockWriteContext {
+    pub async fn get_write_lock(&'_ self) -> RwLockWriteContext<'_> {
         self.0.write().await
     }
 
