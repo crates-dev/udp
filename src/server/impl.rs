@@ -117,7 +117,7 @@ impl Server {
         let config: ServerConfig = self.config.read().await.clone();
         let host: String = config.host.clone();
         let port: usize = config.port;
-        let addr: String = format!("{}{}{}", host, COLON_SPACE_SYMBOL, port);
+        let addr: String = format!("{host}{COLON_SPACE_SYMBOL}{port}");
         let socket: UdpSocket = UdpSocket::bind(&addr)
             .await
             .map_err(|e| ServerError::TcpBindError(e.to_string()))

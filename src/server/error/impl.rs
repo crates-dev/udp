@@ -17,7 +17,7 @@ impl Display for ServerError {
     /// - `fmt::Result` - Result of formatting operation.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::TcpBindError(data) => write!(f, "Tcp bind error{}{}", COLON_SPACE, data),
+            Self::TcpBindError(data) => write!(f, "Tcp bind error{COLON_SPACE}{data}"),
             Self::Unknown => write!(f, "Unknown"),
         }
     }
