@@ -1,6 +1,12 @@
 use crate::*;
 
 /// Implementation of InnerContext methods.
+impl Default for InnerContext {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl InnerContext {
     /// Creates a new InnerContext with default values.
     ///
@@ -95,7 +101,7 @@ impl Context {
     ///
     /// - `OptionSocketAddr` - Clone of the socket address if present.
     pub async fn get_socket_addr(&self) -> OptionSocketAddr {
-        self.get().await.socket_addr.clone()
+        self.get().await.socket_addr
     }
 
     /// Gets the socket address or default if not present.
@@ -188,7 +194,7 @@ impl Context {
             .await
             .send(&self.get_socket().await, &self.get_socket_addr().await)
             .await;
-        return response_result;
+        response_result
     }
 
     /// Sets a value in the context data storage.
