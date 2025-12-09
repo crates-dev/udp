@@ -7,6 +7,7 @@ impl Default for Server {
     /// # Returns
     ///
     /// - `Server` - New server instance with default values.
+    #[inline(always)]
     fn default() -> Self {
         Self {
             config: Arc::new(RwLock::new(ServerConfig::default())),

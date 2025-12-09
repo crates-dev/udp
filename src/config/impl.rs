@@ -7,6 +7,7 @@ impl Default for ServerConfig {
     /// # Returns
     ///
     /// - `ServerConfig` - New config with default values.
+    #[inline(always)]
     fn default() -> Self {
         Self {
             host: DEFAULT_HOST.to_owned(),

@@ -2,6 +2,7 @@ use crate::*;
 
 /// Implementation of InnerContext methods.
 impl Default for InnerContext {
+    #[inline(always)]
     fn default() -> Self {
         Self::new()
     }
@@ -13,6 +14,7 @@ impl InnerContext {
     /// # Returns
     ///
     /// - `InnerContext` - New context instance.
+    #[inline(always)]
     pub fn new() -> Self {
         InnerContext {
             socket: None,

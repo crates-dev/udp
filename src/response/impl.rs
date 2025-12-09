@@ -7,6 +7,7 @@ impl Default for Response {
     /// # Returns
     ///
     /// - `Response` - New response with empty data.
+    #[inline(always)]
     fn default() -> Self {
         Self(Vec::new())
     }
@@ -25,6 +26,7 @@ impl Response {
     /// # Returns
     ///
     /// - `Response` - New response containing the data.
+    #[inline(always)]
     pub fn from<T: Into<ResponseData>>(data: T) -> Self {
         Self(data.into())
     }
