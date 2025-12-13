@@ -1,6 +1,6 @@
 [package]
 name = "udp"
-version = "2.0.4"
+version = "2.0.5"
 readme = "README.md"
 edition = "2024"
 authors = ["root@ltpp.vip"]
@@ -9,14 +9,7 @@ description = "A lightweight and efficient Rust library for building UDP servers
 keywords = ["udp", "request", "response", "server", "network"]
 repository = "https://github.com/crates-dev/udp.git"
 categories = ["network-programming", "web-programming"]
-exclude = [
-    "target",
-    "Cargo.lock",
-    "sh",
-    ".github",
-    "logs",
-    "**/*.log"
-]
+exclude = ["target", "Cargo.lock", "sh", ".github", "logs", "**/*.log"]
 
 [dependencies]
 tokio = { version = "1.48.0", features = ["full"] }
