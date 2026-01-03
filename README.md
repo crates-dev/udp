@@ -24,37 +24,6 @@ To use this crate, you can run cmd:
 cargo add udp
 ```
 
-## Use
-
-```rust
-use udp::*;
-
-async fn test_func(ctx: Context) {
-    ctx.send("udp: 1").await.unwrap();
-}
-
-fn error_handle(error: String) {
-    eprintln!("{}", error);
-    let _ = std::io::Write::flush(&mut std::io::stderr());
-}
-
-#[tokio::main]
-async fn main() {
-    let mut server: Server = Server::new().await;
-    server.host("0.0.0.0").await;
-    server.port(60000).await;
-    server.buffer(100_024_000).await;
-    server.error_handle(error_handle).await;
-    server.func(test_func).await;
-    server
-        .func(|ctx: Context| async move {
-            ctx.send("udp: 2").await.unwrap();
-        })
-        .await;
-    server.run().await;
-}
-```
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
