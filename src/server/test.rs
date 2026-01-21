@@ -1,7 +1,7 @@
+use crate::*;
+
 #[tokio::test]
 async fn test_server_basic_usage() {
-    use crate::*;
-
     async fn test_func(ctx: Context) {
         ctx.send("udp: 1").await.unwrap();
     }
