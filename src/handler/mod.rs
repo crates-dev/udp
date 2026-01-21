@@ -1,6 +1,6 @@
-pub(crate) mod r#fn;
-pub(crate) mod r#impl;
-pub(crate) mod r#trait;
-pub(crate) mod r#type;
+mod r#fn;
+mod r#impl;
+mod r#trait;
+mod r#type;
 
 pub(crate) use {r#fn::*, r#trait::*, r#type::*};

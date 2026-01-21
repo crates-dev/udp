@@ -1,4 +1,4 @@
-pub(crate) mod r#const;
-pub(crate) mod r#type;
+mod r#const;
+mod r#type;
 
 pub use {r#const::*, r#type::*};

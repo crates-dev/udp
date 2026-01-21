@@ -1,7 +1,6 @@
-pub(crate) mod r#enum;
-pub(crate) mod r#impl;
-pub(crate) mod r#struct;
-
+mod r#enum;
+mod r#impl;
+mod r#struct;
 #[cfg(test)]
 mod test;
 
