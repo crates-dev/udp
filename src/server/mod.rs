@@ -1,6 +1,8 @@
-pub(crate) mod error;
+pub(crate) mod r#enum;
 pub(crate) mod r#impl;
 pub(crate) mod r#struct;
 
-pub use error::*;
-pub use r#struct::*;
+#[cfg(test)]
+mod test;
+
+pub use {r#enum::*, r#struct::*};
