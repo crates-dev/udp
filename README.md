@@ -12,7 +12,7 @@
 
 [Official Documentation](https://docs.ltpp.vip/udp/)
 
-[Api Docs](https://docs.rs/udp/latest/udp/)
+[Api Docs](https://docs.rs/udp/latest/)
 
 > A lightweight and efficient Rust library for building UDP servers with request-response handling.
 
