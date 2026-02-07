@@ -3,21 +3,25 @@
 //! A lightweight and efficient Rust library for
 //! building UDP servers with request-response handling.
 
+mod attribute;
 mod common;
 mod config;
 mod context;
-mod handler;
+mod error;
+mod hook;
+mod panic;
 mod request;
 mod response;
 mod server;
 mod socket;
 mod utils;
 
-pub use {config::*, context::*, request::*, response::*, server::*, socket::*, utils::*};
+pub use {
+    attribute::*, common::*, config::*, context::*, error::*, hook::*, panic::*, request::*,
+    response::*, server::*, socket::*, utils::*,
+};
 
 pub use tokio;
-
-use {common::*, handler::*};
 
 use std::{
     any::Any,
@@ -25,13 +29,16 @@ use std::{
     error::Error as StdError,
     fmt::{self, Display},
     future::Future,
-    net::{IpAddr, Ipv4Addr, SocketAddr, SocketAddrV4},
-    panic::set_hook,
+    net::{IpAddr, SocketAddr},
     pin::Pin,
     sync::Arc,
 };
 
 use tokio::{
     net::UdpSocket,
-    sync::{MutexGuard, RwLock, RwLockReadGuard, RwLockWriteGuard},
+    sync::{
+        RwLock, RwLockReadGuard, RwLockWriteGuard,
+        watch::{Receiver, Sender, channel},
+    },
+    task::JoinHandle,
 };

@@ -1,10 +1,8 @@
 use crate::*;
 
 /// Implementation of ArcRwLockUdpSocket methods.
-///
-/// Provides construction and access methods for thread-safe UDP socket.
 impl ArcRwLockUdpSocket {
-    /// Creates a new instance from existing ArcRwLock<UdpSocket>.
+    /// Creates a new instance from existing `ArcRwLock<UdpSocket>`.
     ///
     /// # Arguments
     ///
@@ -13,8 +11,8 @@ impl ArcRwLockUdpSocket {
     /// # Returns
     ///
     /// - `ArcRwLockUdpSocket` - New wrapper instance.
-    pub fn from(arc_rw_lock_socket: ArcRwLock<UdpSocket>) -> Self {
-        Self(arc_rw_lock_socket)
+    pub fn from(socket: ArcRwLock<UdpSocket>) -> Self {
+        Self { socket }
     }
 
     /// Creates a new instance from raw UdpSocket.
@@ -27,24 +25,26 @@ impl ArcRwLockUdpSocket {
     ///
     /// - `ArcRwLockUdpSocket` - New wrapper instance.
     pub fn from_socket(socket: UdpSocket) -> Self {
-        Self(Arc::new(RwLock::new(socket)))
+        Self {
+            socket: arc_rwlock(socket),
+        }
     }
 
     /// Acquires a read lock on the socket.
     ///
     /// # Returns
     ///
-    /// - `RwLockReadGuardUdpSocket` - Read guard for the socket.
-    pub async fn get_read_lock(&'_ self) -> RwLockReadGuardUdpSocket<'_> {
-        self.0.read().await
+    /// - `RwLockReadGuard<UdpSocket>` - Read guard for the socket.
+    pub async fn get_read_lock(&self) -> RwLockReadGuard<'_, UdpSocket> {
+        self.socket.read().await
     }
 
     /// Acquires a write lock on the socket.
     ///
     /// # Returns
     ///
-    /// - `RwLockWriteGuardUdpSocket` - Write guard for the socket.
-    pub async fn get_write_lock(&'_ self) -> RwLockWriteGuardUdpSocket<'_> {
-        self.0.write().await
+    /// - `RwLockWriteGuard<UdpSocket>` - Write guard for the socket.
+    pub async fn get_write_lock(&self) -> RwLockWriteGuard<'_, UdpSocket> {
+        self.socket.write().await
     }
 }

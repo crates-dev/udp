@@ -2,9 +2,9 @@ use crate::*;
 
 /// UDP response wrapper containing response data.
 ///
-/// Provides thread-safe access to response content.
+/// Provides a wrapper for response content.
 #[derive(Clone, Debug)]
-pub struct Response(
+pub struct Response {
     /// The underlying response data.
-    pub(super) ResponseData,
-);
+    pub(super) data: ResponseData,
+}

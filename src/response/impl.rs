@@ -1,27 +1,5 @@
 use crate::*;
 
-/// Standard error implementation for ResponseError.
-impl StdError for ResponseError {}
-
-/// Display implementation for ResponseError.
-impl Display for ResponseError {
-    /// Formats the error for display.
-    ///
-    /// # Arguments
-    ///
-    /// - `&fmt::Formatter` - Formatter for the output.
-    ///
-    /// # Returns
-    ///
-    /// - `fmt::Result` - Result of formatting operation.
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::ResponseError(data) => write!(f, "Response Error{COLON_SPACE}{data}"),
-            Self::Unknown => write!(f, "Unknown"),
-        }
-    }
-}
-
 /// Default implementation for Response.
 impl Default for Response {
     /// Creates a default empty response.
@@ -31,26 +9,27 @@ impl Default for Response {
     /// - `Response` - New response with empty data.
     #[inline(always)]
     fn default() -> Self {
-        Self(Vec::new())
+        Self { data: Vec::new() }
     }
 }
 
 /// Implementation of Response methods.
-///
-/// Provides conversion and sending capabilities for UDP responses.
 impl Response {
     /// Creates a Response from convertible data.
     ///
     /// # Arguments
     ///
-    /// - `T` - Data convertible to ResponseData.
+    /// - `impl Into<ResponseData>` - Data convertible to ResponseData.
     ///
     /// # Returns
     ///
     /// - `Response` - New response containing the data.
     #[inline(always)]
-    pub fn from<T: Into<ResponseData>>(data: T) -> Self {
-        Self(data.into())
+    pub fn from<T>(data: T) -> Self
+    where
+        T: Into<ResponseData>,
+    {
+        Self { data: data.into() }
     }
 
     /// Gets the underlying response data.
@@ -58,36 +37,37 @@ impl Response {
     /// # Returns
     ///
     /// - `&ResponseData` - Reference to the response data.
-    pub fn get_response_data(&self) -> &ResponseData {
-        &self.0
+    pub fn get_data(&self) -> &ResponseData {
+        &self.data
     }
 
     /// Sends the response through the specified socket.
     ///
     /// # Arguments
     ///
-    /// - `&OptionArcRwLockUdpSocket` - Optional socket reference.
-    /// - `&OptionSocketAddr` - Optional target address.
+    /// - `&Option<ArcRwLockUdpSocket>` - Optional socket reference.
+    /// - `&Option<SocketAddr>` - Optional target address.
     ///
     /// # Returns
     ///
     /// - `ResponseResult` - Result of the send operation.
     pub async fn send(
         &self,
-        socket_opt: &OptionArcRwLockUdpSocket,
-        addr_opt: &OptionSocketAddr,
+        socket_opt: &Option<ArcRwLockUdpSocket>,
+        addr_opt: &Option<SocketAddr>,
     ) -> ResponseResult {
         if let Some(socket_lock) = socket_opt {
-            let socket = socket_lock.get_read_lock().await;
+            let socket: tokio::sync::RwLockReadGuard<'_, UdpSocket> =
+                socket_lock.get_read_lock().await;
             if let Some(addr) = addr_opt {
-                let response_data: &ResponseData = self.get_response_data();
                 socket
-                    .send_to(response_data, &addr)
+                    .send_to(self.get_data(), addr)
                     .await
-                    .map_err(|e| ResponseError::ResponseError(e.to_string()))?;
+                    .map_err(|e| ResponseError::SendError(e.to_string()))?;
                 return Ok(());
             }
+            return Err(ResponseError::AddressNotAvailable);
         }
-        Err(ResponseError::Unknown)
+        Err(ResponseError::SocketNotAvailable)
     }
 }

@@ -4,7 +4,7 @@ use crate::*;
 ///
 /// Provides synchronized access to UDP socket operations.
 #[derive(Clone, Debug)]
-pub struct ArcRwLockUdpSocket(
+pub struct ArcRwLockUdpSocket {
     /// Underlying UDP socket with read-write lock.
-    pub(super) ArcRwLock<UdpSocket>,
-);
+    pub(super) socket: ArcRwLock<UdpSocket>,
+}

@@ -1,27 +1,28 @@
 use crate::*;
 
-/// Inner context containing all UDP communication components.
+/// Represents the internal state of the application context.
 ///
-/// Stores the socket, request/response data and additional context information.
+/// This structure holds all the data associated with a single request-response cycle,
+/// including the socket, request, response, and any custom attributes.
 #[derive(Clone)]
-pub struct InnerContext {
-    /// UDP socket wrapper with read-write lock.
-    pub(crate) socket: OptionArcRwLockUdpSocket,
-    /// Incoming request data.
-    pub(crate) request: Request,
-    /// Outgoing response data.
-    pub(crate) response: Response,
-    /// Remote socket address.
-    pub(crate) socket_addr: OptionSocketAddr,
-    /// Additional context data storage.
-    pub(crate) data: HashMapArcAnySendSync,
+pub struct ContextData {
+    /// A flag indicating whether the request handling has been aborted.
+    pub(super) aborted: bool,
+    /// The underlying network socket for the connection.
+    pub(super) socket: Option<ArcRwLockUdpSocket>,
+    /// The incoming UDP request data.
+    pub(super) request: Request,
+    /// The outgoing UDP response data.
+    pub(super) response: Response,
+    /// The client's socket address.
+    pub(super) client_addr: Option<SocketAddr>,
+    /// A collection of custom attributes for sharing data within the request lifecycle.
+    pub(super) attributes: ThreadSafeAttributeStore,
 }
 
-/// Thread-safe context wrapper for UDP operations.
+/// The main application context, providing thread-safe access to request and response data.
 ///
-/// Provides synchronized access to the inner context.
+/// This is a wrapper around `ContextData` that uses an `Arc<RwLock<>>` to allow
+/// for shared, mutable access across asynchronous tasks.
 #[derive(Clone)]
-pub struct Context(
-    /// Thread-safe reference to inner context.
-    pub(super) ArcRwLock<InnerContext>,
-);
+pub struct Context(pub(super) ArcRwLock<ContextData>);
