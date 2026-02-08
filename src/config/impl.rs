@@ -278,7 +278,7 @@ impl ServerConfigData {
     ///
     /// # Arguments
     ///
-    /// - `impl AsRef<str>` - The host address to set.
+    /// - `AsRef<str>` - The host address to set.
     pub fn set_host<H>(&mut self, host: H)
     where
         H: AsRef<str>,

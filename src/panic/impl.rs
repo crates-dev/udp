@@ -22,7 +22,7 @@ impl PanicData {
     ///
     /// # Arguments
     ///
-    /// - `impl AsRef<str>` - The panic message.
+    /// - `AsRef<str>` - The panic message.
     ///
     /// # Returns
     ///
@@ -75,7 +75,7 @@ impl PanicData {
     ///
     /// # Arguments
     ///
-    /// - `impl AsRef<str>` - The location string (file:line).
+    /// - `AsRef<str>` - The location string (file:line).
     pub fn set_location<L>(&mut self, location: L)
     where
         L: AsRef<str>,

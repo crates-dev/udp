@@ -393,7 +393,7 @@ impl Context {
     ///
     /// # Arguments
     ///
-    /// - `impl Into<ResponseData>` - The response data.
+    /// - `Into<ResponseData>` - The response data.
     ///
     /// # Returns
     ///

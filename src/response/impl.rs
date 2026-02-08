@@ -19,7 +19,7 @@ impl Response {
     ///
     /// # Arguments
     ///
-    /// - `impl Into<ResponseData>` - Data convertible to ResponseData.
+    /// - `Into<ResponseData>` - Data convertible to ResponseData.
     ///
     /// # Returns
     ///
