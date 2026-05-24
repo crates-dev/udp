@@ -131,7 +131,7 @@ impl ServerConfig {
     /// # Returns
     ///
     /// - `ServerConfigData` - A `ServerConfigData` instance containing the current server configuration.
-    pub(crate) async fn get_data(&self) -> ServerConfigData {
+    pub async fn get_data(&self) -> ServerConfigData {
         self.read().await.clone()
     }
 
