@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Thread-safe wrapper for UDP socket with read-write lock.
 ///

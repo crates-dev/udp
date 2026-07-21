@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Provides a default implementation for ServerData.
 impl Default for ServerData {
@@ -235,7 +235,7 @@ impl Server {
         let addr: String = format!("{host}:{port}");
         UdpSocket::bind(&addr)
             .await
-            .map_err(|e| ServerError::UdpBind(e.to_string()))
+            .map_err(|error: IoError| ServerError::UdpBind(error.to_string()))
     }
 
     /// Spawns a new asynchronous task to handle a single client request.

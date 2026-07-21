@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Type alias for thread-safe attribute storage.
 ///

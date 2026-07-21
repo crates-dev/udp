@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Type alias for response data (byte vector).
 pub type ResponseData = Vec<u8>;

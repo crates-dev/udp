@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// UDP response wrapper containing response data.
 ///

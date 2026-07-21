@@ -1,3 +1,3 @@
 mod server;
 
-use {server::*, udp::*};
+use udp::*;

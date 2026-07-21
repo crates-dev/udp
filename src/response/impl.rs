@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Default implementation for Response.
 impl Default for Response {
@@ -63,7 +63,7 @@ impl Response {
                 socket
                     .send_to(self.get_data(), addr)
                     .await
-                    .map_err(|e| ResponseError::SendError(e.to_string()))?;
+                    .map_err(|error: IoError| ResponseError::SendError(error.to_string()))?;
                 return Ok(());
             }
             return Err(ResponseError::AddressNotAvailable);

@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Provides a default implementation for `ServerControlHook`.
 impl Default for ServerControlHook {

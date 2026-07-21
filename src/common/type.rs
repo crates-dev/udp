@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 
 /// Thread-safe reference-counted read-write lock wrapper.
 pub type ArcRwLock<T> = Arc<RwLock<T>>;

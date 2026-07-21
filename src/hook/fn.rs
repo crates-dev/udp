@@ -1,4 +1,4 @@
-use crate::*;
+use super::*;
 /// Creates a new `ServerHookHandler` from a trait object.
 ///
 /// # Arguments

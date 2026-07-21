@@ -5,3 +5,5 @@ mod r#trait;
 mod r#type;
 
 pub use {r#fn::*, r#struct::*, r#trait::*, r#type::*};
+
+use super::*;
