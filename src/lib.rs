@@ -26,10 +26,8 @@ pub use tokio;
 use std::{
     any::Any,
     collections::HashMap,
-    error::Error as StdError,
     fmt::{self, Display},
     future::Future,
-    io::Error as IoError,
     net::{IpAddr, SocketAddr},
     pin::Pin,
     sync::Arc,

@@ -1,7 +1,7 @@
 use super::*;
 
 /// Standard error implementation for ServerError.
-impl StdError for ServerError {}
+impl std::error::Error for ServerError {}
 
 /// Display implementation for ServerError.
 impl Display for ServerError {
@@ -25,7 +25,7 @@ impl Display for ServerError {
 }
 
 /// Standard error implementation for ResponseError.
-impl StdError for ResponseError {}
+impl std::error::Error for ResponseError {}
 
 /// Display implementation for ResponseError.
 impl Display for ResponseError {
@@ -49,7 +49,7 @@ impl Display for ResponseError {
 }
 
 /// Standard error implementation for RequestError.
-impl StdError for RequestError {}
+impl std::error::Error for RequestError {}
 
 /// Display implementation for RequestError.
 impl Display for RequestError {

@@ -46,7 +46,7 @@ async fn test_server_run_and_shutdown() {
         }
 
         async fn handle(self, ctx: &Context) {
-            let _ = ctx.send("test response").await;
+            let _: Result<(), ResponseError> = ctx.send("test response").await;
         }
     }
 

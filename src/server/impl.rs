@@ -235,7 +235,7 @@ impl Server {
         let addr: String = format!("{host}:{port}");
         UdpSocket::bind(&addr)
             .await
-            .map_err(|error: IoError| ServerError::UdpBind(error.to_string()))
+            .map_err(|error: std::io::Error| ServerError::UdpBind(error.to_string()))
     }
 
     /// Spawns a new asynchronous task to handle a single client request.
@@ -311,20 +311,23 @@ impl Server {
         let wait_hook: SharedAsyncTaskFactory<()> = Arc::new(move || {
             let mut wait_receiver_clone: Receiver<()> = wait_receiver.clone();
             Box::pin(async move {
-                let _ = wait_receiver_clone.changed().await;
+                let _: Result<(), tokio::sync::watch::error::RecvError> =
+                    wait_receiver_clone.changed().await;
             })
         });
         let shutdown_sender_arc: Arc<Sender<()>> = Arc::new(shutdown_sender);
         let shutdown_hook: SharedAsyncTaskFactory<()> = Arc::new(move || {
             let shutdown_sender_clone: Arc<Sender<()>> = shutdown_sender_arc.clone();
             Box::pin(async move {
-                let _ = shutdown_sender_clone.send(());
+                let _: Result<(), tokio::sync::watch::error::SendError<()>> =
+                    shutdown_sender_clone.send(());
             })
         });
         tokio::spawn(async move {
-            let _ = shutdown_receiver.changed().await;
+            let _: Result<(), tokio::sync::watch::error::RecvError> =
+                shutdown_receiver.changed().await;
             accept_requests.abort();
-            let _ = wait_sender.send(());
+            let _: Result<(), tokio::sync::watch::error::SendError<()>> = wait_sender.send(());
         });
         let mut server_control_hook: ServerControlHook = ServerControlHook::default();
         server_control_hook.set_shutdown_hook(shutdown_hook);

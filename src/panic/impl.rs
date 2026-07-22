@@ -105,4 +105,4 @@ impl Display for PanicData {
 }
 
 /// Implementation of StdError for PanicData.
-impl StdError for PanicData {}
+impl std::error::Error for PanicData {}

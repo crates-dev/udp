@@ -8,7 +8,7 @@ impl ServerHook for EchoHandler {
     async fn handle(self, ctx: &Context) {
         let request: Request = ctx.get_request().await;
         let response: String = format!("Echo: {request:?}");
-        let _ = ctx.send(response).await;
+        let _: Result<(), ResponseError> = ctx.send(response).await;
     }
 }
 
